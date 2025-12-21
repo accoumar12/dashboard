@@ -1,0 +1,29 @@
+{
+    "name": "display-name-goes-here",
+    "build": {
+        "dockerfile": "./Dockerfile",
+        "context": "..",
+    },
+    "runArgs": [
+        "--name",
+        "${localEnv:USER}_devcontainer",
+        // "--env-file",
+        // "${localWorkspaceFolder}/.env",
+        // useful for setting limits, notably for running the tests where multiple processes can spawn and take over all the cpus...
+        // "--cpus",
+        // "8",
+        // "--memory",
+        // "8G",
+    ],
+    // "postCreateCommand": "bash .devcontainer/scripts/install.sh",
+    // "mounts": [
+    // ],
+    "customizations": {
+        "vscode": {
+            "settings": {},
+            "extensions": [
+                "ms-python.python",
+            ]
+        }
+    }
+}
