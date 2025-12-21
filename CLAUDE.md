@@ -32,6 +32,10 @@ This document contains critical information about working with this codebase. Fo
     - Document with docstrings
     - Use f-strings for formatting
 
+5. Follow specifications
+    - Follow [the specifications](./references/spec.md)
+    - Check [the todos](./references/todo.md) as you are doing them
+
 - For commits fixing bugs or adding features based on user reports add:
 
   ```bash
