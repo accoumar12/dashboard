@@ -175,33 +175,28 @@ Track your progress building the SQL Dashboard application. Check off items as y
 ## Phase 6: Relationship-Aware Filtering
 
 ### Step 13: Foreign Key Relationship Graph
-- [ ] Create `backend/app/relationship_graph.py`
-- [ ] Define Edge type (from_table, to_table, column_pairs)
-- [ ] Create RelationshipGraph class
-- [ ] Implement `__init__()` to build bidirectional graph
-- [ ] Implement `find_path()` with BFS algorithm
-- [ ] Implement `get_related_tables()` method
-- [ ] Update schema_inspector with `build_relationship_graph()`
-- [ ] Cache relationship graph in main.py
-- [ ] Add GET `/api/relationships/{table_name}` endpoint
-- [ ] Write comprehensive docstrings
+- [x] Create `backend/app/relationship_graph.py`
+- [x] Define Edge type (from_table, to_table, column_pairs)
+- [x] Create RelationshipGraph class
+- [x] Implement `__init__()` to build bidirectional graph
+- [x] Implement `find_path()` with BFS algorithm
+- [x] Implement `get_related_tables()` method
+- [x] Cache relationship graph in main.py
+- [x] Write comprehensive docstrings
 - [ ] Test: Graph builds correctly from sample schema
 - [ ] Test: find_path returns correct FK paths
-- [ ] Test: `/api/relationships/posts` returns ["users"]
 
 ### Step 14: Cross-Table Filtering with EXISTS
-- [ ] Create `build_exists_subquery()` in query_builder.py
-- [ ] Build correlated EXISTS subqueries
-- [ ] Handle JOIN chains through intermediate tables
-- [ ] Update `build_where_clause()` for cross-table filters
-- [ ] Use relationship graph to find FK paths
-- [ ] Raise error if no path exists
-- [ ] Update `execute_table_query()` to accept relationship_graph
-- [ ] Pass cached graph from main.py
-- [ ] Add more test data with cross-table relationships
-- [ ] Update README with cross-table filter examples
-- [ ] Test: Filter users by posts.title
-- [ ] Test: Filter posts by users.name
+- [x] Create `build_exists_subquery()` in query_builder.py
+- [x] Build correlated EXISTS subqueries
+- [x] Handle JOIN chains through intermediate tables
+- [x] Update `build_where_clause()` for cross-table filters
+- [x] Use relationship graph to find FK paths
+- [x] Raise error if no path exists
+- [x] Update `execute_table_query()` to accept relationship_graph
+- [x] Pass cached graph from main.py
+- [ ] Test: Filter customers by orders (cross-table)
+- [ ] Test: Filter orders by products (cross-table)
 - [ ] Verify EXISTS subqueries are correct
 
 ### Step 15: Frontend Cascading Filter Updates

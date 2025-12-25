@@ -9,9 +9,13 @@ from app.config import settings
 from app.database import test_connection
 from app.models import DatabaseSchemaModel, QueryRequest, QueryResponse
 from app.query_builder import execute_table_query
+from app.relationship_graph import RelationshipGraph
 from app.schema_inspector import analyze_schema
 
 logger = logging.getLogger(__name__)
+
+# Global cache for relationship graph
+_relationship_graph: RelationshipGraph | None = None
 
 app = FastAPI(
     title="SQL Dashboard API",
@@ -34,19 +38,31 @@ app.add_middleware(
 async def startup_event() -> None:
     """Startup event handler.
 
-    Initializes database connection on application startup.
+    Initializes database connection and builds relationship graph.
     """
+    global _relationship_graph
+
     logger.info("Starting SQL Dashboard API...")
     try:
-        from app.database import initialize_database
+        from app import database
 
-        _, is_playground = await initialize_database()
+        _, is_playground = await database.initialize_database()
         if is_playground:
             logger.info("✓ Using SQLite playground database")
         else:
             logger.info("✓ Connected to PostgreSQL database")
+
+        # Build relationship graph
+        if database.engine:
+            logger.info("Building relationship graph...")
+            schema = await analyze_schema(database.engine)
+            _relationship_graph = RelationshipGraph(schema)
+            logger.info(f"✓ Built relationship graph with {len(schema.relationships)} relationships")
+        else:
+            logger.warning("Engine is None, cannot build relationship graph")
+
     except Exception as e:
-        logger.error(f"Failed to initialize database: {e}")
+        logger.error(f"Failed to initialize: {e}", exc_info=True)
         logger.warning("Application started but database is unavailable")
 
 
@@ -82,14 +98,14 @@ async def get_schema() -> DatabaseSchemaModel:
         HTTPException: If schema analysis fails.
     """
     try:
-        from app.database import engine
+        from app import database
 
-        if engine is None:
+        if database.engine is None:
             raise HTTPException(
                 status_code=503, detail="Database not initialized"
             )
 
-        schema = await analyze_schema(engine)
+        schema = await analyze_schema(database.engine)
         return DatabaseSchemaModel(
             tables=[
                 {
@@ -126,6 +142,8 @@ async def get_schema() -> DatabaseSchemaModel:
 async def query_table(request: QueryRequest) -> QueryResponse:
     """Execute a filtered and paginated query on a table.
 
+    Supports both direct and cross-table filtering via relationship graph.
+
     Args:
         request: Query request with table, filters, sort, and pagination.
 
@@ -136,16 +154,16 @@ async def query_table(request: QueryRequest) -> QueryResponse:
         HTTPException: If query execution fails.
     """
     try:
-        from app.database import engine
+        from app import database
 
-        if engine is None:
+        if database.engine is None:
             raise HTTPException(
                 status_code=503, detail="Database not initialized"
             )
 
-        return await execute_table_query(engine, request)
+        return await execute_table_query(database.engine, request, _relationship_graph)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Query execution failed: {e}")
+        logger.error(f"Query execution failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Query execution failed")
