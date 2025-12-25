@@ -7,33 +7,33 @@ Track your progress building the SQL Dashboard application. Check off items as y
 ## Phase 1: Project Foundation
 
 ### Step 1: Backend Skeleton Setup
-- [ ] Create `backend/pyproject.toml` with FastAPI, SQLAlchemy, psycopg2-binary, uvicorn
-- [ ] Create `backend/app/__init__.py`
-- [ ] Create `backend/app/main.py` with FastAPI app and CORS
-- [ ] Create `backend/app/config.py` with DATABASE_URL setting
-- [ ] Implement GET `/api/health` endpoint
-- [ ] Create `backend/README.md` with setup instructions
-- [ ] Test: Health endpoint returns 200 OK
+- [x] Create `backend/pyproject.toml` with FastAPI, SQLAlchemy, psycopg2-binary, uvicorn
+- [x] Create `backend/app/__init__.py`
+- [x] Create `backend/app/main.py` with FastAPI app and CORS
+- [x] Create `backend/app/config.py` with DATABASE_URL setting
+- [x] Implement GET `/api/health` endpoint
+- [x] Create `backend/README.md` with setup instructions
+- [x] Test: Health endpoint returns 200 OK
 
 ### Step 2: Frontend Skeleton Setup
-- [ ] Initialize Vite React+TypeScript project in `frontend/`
-- [ ] Install axios and @tanstack/react-query
-- [ ] Create `frontend/src/lib/api.ts` with axios client
-- [ ] Create `frontend/src/types.ts` (empty)
-- [ ] Configure Vite proxy for `/api` routes
-- [ ] Update `App.tsx` to fetch and display health check
-- [ ] Create `frontend/README.md` with setup instructions
-- [ ] Test: Frontend shows "Connected to backend"
+- [x] Initialize Vite React+TypeScript project in `frontend/`
+- [x] Install axios and @tanstack/react-query
+- [x] Create `frontend/src/lib/api.ts` with axios client
+- [x] Create `frontend/src/types.ts` (empty)
+- [x] Configure Vite proxy for `/api` routes
+- [x] Update `App.tsx` to fetch and display health check
+- [x] Create `frontend/README.md` with setup instructions
+- [x] Test: Frontend shows "Connected to backend"
 
 ### Step 3: Database Connection
-- [ ] Update `backend/app/config.py` with DATABASE_URL validation
-- [ ] Create `backend/app/database.py` with async SQLAlchemy engine
-- [ ] Implement session factory and `get_db()` dependency
-- [ ] Implement `test_connection()` function
-- [ ] Add database startup event to `main.py`
-- [ ] Implement GET `/api/db-status` endpoint
+- [x] Update `backend/app/config.py` with DATABASE_URL validation
+- [x] Create `backend/app/database.py` with async SQLAlchemy engine
+- [x] Implement session factory and `get_db()` dependency
+- [x] Implement `test_connection()` function
+- [x] Add database startup event to `main.py`
+- [x] Implement GET `/api/db-status` endpoint
 - [ ] Create `backend/scripts/init_db.py` script
-- [ ] Update backend README with PostgreSQL setup
+- [x] Update backend README with PostgreSQL setup
 - [ ] Test: `/api/db-status` returns `{"connected": true}`
 
 ---
@@ -41,63 +41,80 @@ Track your progress building the SQL Dashboard application. Check off items as y
 ## Phase 2: Schema Inspection & Basic Queries
 
 ### Step 4: Schema Inspection Foundation
-- [ ] Create `backend/app/schema_inspector.py`
-- [ ] Define ColumnInfo, TableInfo, RelationshipInfo, DatabaseSchema types
-- [ ] Implement `analyze_schema(engine)` function
-- [ ] Create `backend/app/models.py` with Pydantic schema models
-- [ ] Implement GET `/api/schema` endpoint
-- [ ] Create `backend/test_data/sample_schema.sql` (users, posts tables)
-- [ ] Update README with schema loading instructions
+- [x] Create `backend/app/schema_inspector.py`
+- [x] Define ColumnInfo, TableInfo, RelationshipInfo, DatabaseSchema types
+- [x] Implement `analyze_schema(engine)` function
+- [x] Create `backend/app/models.py` with Pydantic schema models
+- [x] Implement GET `/api/schema` endpoint
+- [x] Create `backend/test_data/sample_schema.sql` (users, posts tables)
+- [x] Update README with schema loading instructions
 - [ ] Test: Load schema and verify `/api/schema` returns correct structure
 
 ### Step 5: Basic Table Query Endpoint
-- [ ] Create `backend/app/query_builder.py`
-- [ ] Define QueryRequest and QueryResponse models
-- [ ] Implement `execute_table_query(engine, request)` function
-- [ ] Add table existence validation
-- [ ] Implement pagination with OFFSET/LIMIT
-- [ ] Implement count query for total rows
-- [ ] Add POST `/api/query` endpoint with error handling
-- [ ] Create `backend/test_data/sample_data.sql` with test data
-- [ ] Update README with query examples
+- [x] Create `backend/app/query_builder.py`
+- [x] Define QueryRequest and QueryResponse models
+- [x] Implement `execute_table_query(engine, request)` function
+- [x] Add table existence validation
+- [x] Implement pagination with OFFSET/LIMIT
+- [x] Implement count query for total rows
+- [x] Add POST `/api/query` endpoint with error handling
+- [x] Create `backend/test_data/sample_data.sql` with test data
+- [x] Update README with query examples
 - [ ] Test: Query users and posts tables with pagination
 
 ### Step 6: Display Single Table in Frontend
-- [ ] Update `frontend/src/types.ts` with schema and query types
-- [ ] Create `frontend/src/hooks/useSchema.ts`
-- [ ] Create `frontend/src/hooks/useTableData.ts`
-- [ ] Create `frontend/src/components/DataTable.tsx`
-- [ ] Implement loading and error states in DataTable
-- [ ] Update `App.tsx` with QueryClientProvider
-- [ ] Display table list on left, selected table on right
-- [ ] Add basic CSS for table styling
+- [x] Update `frontend/src/types.ts` with schema and query types
+- [x] Create `frontend/src/hooks/useSchema.ts`
+- [x] Create `frontend/src/hooks/useTableData.ts`
+- [x] Create `frontend/src/components/DataTable.tsx`
+- [x] Implement loading and error states in DataTable
+- [x] Update `App.tsx` with QueryClientProvider
+- [x] Display table list on left, selected table on right
+- [x] Add basic CSS for table styling
 - [ ] Test: View and switch between users and posts tables
+
+---
+
+## Phase 2.5: Embedded Test Database (Playground)
+
+### Step 6.5: Create SQLite Playground Database
+- [x] Create `backend/playground.db` with SQLite
+- [x] Design e-commerce schema (customers, categories, products, orders, order_items)
+- [x] Generate realistic sample data (8 customers, 5 categories, 20 products, 30 orders, 69 order items)
+- [x] Update `config.py` to support SQLite fallback
+- [x] Modify `database.py` to detect database type (PostgreSQL vs SQLite)
+- [x] Update schema inspector to work with both database types
+- [x] Add auto-detection: use SQLite if PostgreSQL unavailable
+- [x] Create `backend/scripts/create_playground_db.py` script
+- [x] Update README with playground database information
+- [x] Test: Launch app without PostgreSQL, verify playground database loads
+- [x] Test: View all tables, test relationships and filtering
 
 ---
 
 ## Phase 3: Grid Layout & Multiple Tables
 
 ### Step 7: Grid Layout Implementation
-- [ ] Install react-grid-layout and types
-- [ ] Create `frontend/src/components/WidgetGrid.tsx`
-- [ ] Define widget config type (i, x, y, w, h, tableName)
-- [ ] Create `frontend/src/components/TableWidget.tsx`
-- [ ] Add title bar and close button to widgets
-- [ ] Update `App.tsx` to use WidgetGrid
-- [ ] Implement `onLayoutChange` handler (log for now)
-- [ ] Import react-grid-layout CSS
-- [ ] Test: Drag and resize a table widget
+- [x] Install react-grid-layout and types
+- [x] Create `frontend/src/components/WidgetGrid.tsx`
+- [x] Define widget config type (i, x, y, w, h, tableName)
+- [x] Create `frontend/src/components/TableWidget.tsx`
+- [x] Add title bar and close button to widgets
+- [x] Update `App.tsx` to use WidgetGrid
+- [x] Implement `onLayoutChange` handler (log for now)
+- [x] Import react-grid-layout CSS
+- [x] Test: Drag and resize a table widget
 
 ### Step 8: Sidebar for Table Selection
-- [ ] Create `frontend/src/components/Sidebar.tsx`
-- [ ] Position sidebar on right side (250px width)
-- [ ] Display table list with checkboxes
-- [ ] Update `App.tsx` with `visibleTables` state (Set)
-- [ ] Implement table toggle handlers (add/remove widgets)
-- [ ] Create `frontend/src/lib/gridUtils.ts`
-- [ ] Implement `findNextPosition()` auto-positioning logic
-- [ ] Add layout styling (margin-right for sidebar)
-- [ ] Test: Add/remove multiple tables via sidebar
+- [x] Create `frontend/src/components/Sidebar.tsx`
+- [x] Position sidebar on left side (280px width)
+- [x] Display table list with checkboxes
+- [x] Update `App.tsx` with `visibleTables` state (Set)
+- [x] Implement table toggle handlers (add/remove widgets)
+- [x] Create `frontend/src/lib/gridUtils.ts`
+- [x] Implement `findNextPosition()` auto-positioning logic
+- [x] Add layout styling for grid container
+- [x] Test: Add/remove multiple tables via sidebar
 
 ---
 
