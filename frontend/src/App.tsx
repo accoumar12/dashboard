@@ -1,73 +1,58 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo } from 'react';
 import type { Layout } from 'react-grid-layout/legacy';
+import { FilterBuilder } from './components/FilterBuilder';
 import { Sidebar } from './components/Sidebar';
 import { TableWidget } from './components/TableWidget';
 import { WidgetGrid } from './components/WidgetGrid';
 import type { WidgetConfig } from './components/WidgetGrid';
+import { useFilters } from './hooks/useFilters';
 import { useSchema } from './hooks/useSchema';
-import { findNextPosition, getDefaultWidgetSize } from './lib/gridUtils';
+import { useTableSelection } from './hooks/useTableSelection';
+import { getDefaultWidgetSize } from './lib/gridUtils';
 import './App.css';
 
 const queryClient = new QueryClient();
 
 function Dashboard() {
   const { data: schema, isLoading: schemaLoading, error: schemaError } = useSchema();
+  const { visibleTables, toggleTable } = useTableSelection();
+  const { filters, addFilter, removeFilter } = useFilters();
 
-  const [visibleTables, setVisibleTables] = useState<Set<string>>(new Set());
-  const [widgets, setWidgets] = useState<WidgetConfig[]>([]);
+  // Generate widgets from visible tables (auto-positioned)
+  const widgets = useMemo<WidgetConfig[]>(() => {
+    const size = getDefaultWidgetSize();
+    const gridCols = 12;
+    const widgetCols = size.w;
+    const widgetsPerRow = Math.floor(gridCols / widgetCols);
 
-  const handleToggleTable = (tableName: string) => {
-    if (visibleTables.has(tableName)) {
-      // Remove table
-      setVisibleTables((prev) => {
-        const next = new Set(prev);
-        next.delete(tableName);
-        return next;
-      });
-      setWidgets((prev) => prev.filter((w) => w.i !== tableName));
-    } else {
-      // Add table
-      setVisibleTables((prev) => new Set(prev).add(tableName));
+    return Array.from(visibleTables).map((tableName, index) => {
+      const row = Math.floor(index / widgetsPerRow);
+      const col = index % widgetsPerRow;
 
-      const position = findNextPosition(widgets);
-      const size = getDefaultWidgetSize();
-
-      const newWidget: WidgetConfig = {
+      return {
         i: tableName,
-        x: position.x,
-        y: position.y,
-        w: size.w,
+        x: col * widgetCols,
+        y: row * size.h,
+        w: widgetCols,
         h: size.h,
         minW: 3,
         minH: 3,
       };
+    });
+  }, [visibleTables]);
 
-      setWidgets((prev) => [...prev, newWidget]);
-    }
+  const handleToggleTable = (tableName: string) => {
+    toggleTable(tableName);
   };
 
-  const handleLayoutChange = (layout: Layout) => {
-    // Update widget positions when user drags/resizes
-    setWidgets((prev) =>
-      prev.map((widget) => {
-        const layoutItem = layout.find((l) => l.i === widget.i);
-        if (layoutItem) {
-          return {
-            ...widget,
-            x: layoutItem.x,
-            y: layoutItem.y,
-            w: layoutItem.w,
-            h: layoutItem.h,
-          };
-        }
-        return widget;
-      })
-    );
+  const handleLayoutChange = (_layout: Layout) => {
+    // Layout changes are not persisted to URL
+    // Widgets are auto-positioned based on visible tables
   };
 
   const handleCloseWidget = (tableName: string) => {
-    handleToggleTable(tableName);
+    toggleTable(tableName);
   };
 
   if (schemaLoading) {
@@ -108,6 +93,13 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
+      <FilterBuilder
+        tables={schema.tables}
+        filters={filters}
+        onAddFilter={addFilter}
+        onRemoveFilter={removeFilter}
+      />
+
       <Sidebar
         tables={schema.tables}
         visibleTables={visibleTables}
@@ -134,6 +126,7 @@ function Dashboard() {
                   <TableWidget
                     tableName={widget.i}
                     tableInfo={tableInfo}
+                    filters={filters}
                     onClose={() => handleCloseWidget(widget.i)}
                   />
                 </div>

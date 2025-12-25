@@ -1,0 +1,240 @@
+/**
+ * FilterBuilder - Panel for creating and managing filters.
+ */
+
+import type { ColumnFilter, TableInfo } from '../types';
+
+interface FilterBuilderProps {
+  tables: TableInfo[];
+  filters: ColumnFilter[];
+  onAddFilter: (filter: ColumnFilter) => void;
+  onRemoveFilter: (index: number) => void;
+}
+
+const OPERATORS = [
+  { value: 'eq', label: 'Equals' },
+  { value: 'ne', label: 'Not Equals' },
+  { value: 'gt', label: 'Greater Than' },
+  { value: 'lt', label: 'Less Than' },
+  { value: 'gte', label: 'Greater Than or Equal' },
+  { value: 'lte', label: 'Less Than or Equal' },
+  { value: 'contains', label: 'Contains' },
+  { value: 'startswith', label: 'Starts With' },
+  { value: 'endswith', label: 'Ends With' },
+  { value: 'is_null', label: 'Is Null' },
+  { value: 'is_not_null', label: 'Is Not Null' },
+];
+
+export function FilterBuilder({
+  tables,
+  filters,
+  onAddFilter,
+  onRemoveFilter,
+}: FilterBuilderProps) {
+  const handleAddFilter = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const table = formData.get('table') as string;
+    const column = formData.get('column') as string;
+    const operator = formData.get('operator') as string;
+    const value = formData.get('value') as string;
+
+    if (!table || !column || !operator) {
+      return;
+    }
+
+    // For null checks, value is not needed
+    const filterValue = operator === 'is_null' || operator === 'is_not_null' ? '' : value;
+
+    onAddFilter({
+      table,
+      column,
+      operator,
+      value: filterValue,
+    });
+
+    e.currentTarget.reset();
+  };
+
+  return (
+    <div
+      style={{
+        width: '320px',
+        backgroundColor: '#fff',
+        borderRight: '1px solid #e5e7eb',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          padding: '20px',
+          borderBottom: '1px solid #e5e7eb',
+          backgroundColor: '#f9fafb',
+        }}
+      >
+        <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#1f2937' }}>
+          Filters ({filters.length})
+        </h2>
+        <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#6b7280' }}>
+          Filter data across tables
+        </p>
+      </div>
+
+      <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+        {/* Active Filters */}
+        {filters.length > 0 && (
+          <div style={{ marginBottom: '16px' }}>
+            {filters.map((filter, index) => (
+              <div
+                key={index}
+                style={{
+                  padding: '12px',
+                  backgroundColor: '#eff6ff',
+                  borderRadius: '6px',
+                  marginBottom: '8px',
+                  fontSize: '13px',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, color: '#1e40af', marginBottom: '4px' }}>
+                      {filter.table}.{filter.column}
+                    </div>
+                    <div style={{ color: '#6b7280' }}>
+                      {OPERATORS.find((op) => op.value === filter.operator)?.label || filter.operator}
+                      {filter.value && `: ${filter.value}`}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => onRemoveFilter(index)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      fontSize: '18px',
+                      cursor: 'pointer',
+                      color: '#9ca3af',
+                      padding: '0 4px',
+                      lineHeight: 1,
+                    }}
+                    title="Remove filter"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Add Filter Form */}
+        <form onSubmit={handleAddFilter}>
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px', color: '#374151' }}>
+              Table
+            </label>
+            <select
+              name="table"
+              required
+              style={{
+                width: '100%',
+                padding: '8px',
+                border: '1px solid #d1d5db',
+                borderRadius: '4px',
+                fontSize: '14px',
+              }}
+            >
+              <option value="">Select table...</option>
+              {tables.map((table) => (
+                <option key={table.name} value={table.name}>
+                  {table.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px', color: '#374151' }}>
+              Column
+            </label>
+            <input
+              type="text"
+              name="column"
+              required
+              placeholder="Column name"
+              style={{
+                width: '100%',
+                padding: '8px',
+                border: '1px solid #d1d5db',
+                borderRadius: '4px',
+                fontSize: '14px',
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px', color: '#374151' }}>
+              Operator
+            </label>
+            <select
+              name="operator"
+              required
+              style={{
+                width: '100%',
+                padding: '8px',
+                border: '1px solid #d1d5db',
+                borderRadius: '4px',
+                fontSize: '14px',
+              }}
+            >
+              <option value="">Select operator...</option>
+              {OPERATORS.map((op) => (
+                <option key={op.value} value={op.value}>
+                  {op.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div style={{ marginBottom: '12px' }}>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px', color: '#374151' }}>
+              Value
+            </label>
+            <input
+              type="text"
+              name="value"
+              placeholder="Filter value"
+              style={{
+                width: '100%',
+                padding: '8px',
+                border: '1px solid #d1d5db',
+                borderRadius: '4px',
+                fontSize: '14px',
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            style={{
+              width: '100%',
+              padding: '10px',
+              backgroundColor: '#667eea',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '14px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Add Filter
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}

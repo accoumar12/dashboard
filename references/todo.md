@@ -120,61 +120,53 @@ Track your progress building the SQL Dashboard application. Check off items as y
 
 ## Phase 4: URL State Management
 
-### Step 9: URL State Foundation
-- [ ] Create `frontend/src/lib/urlState.ts`
-- [ ] Define DashboardState type (widgets, filters, sorts)
-- [ ] Implement `encodeState()` function (JSON + base64)
-- [ ] Implement `decodeState()` function with validation
-- [ ] Implement `getDefaultState()` function
-- [ ] Create `frontend/src/hooks/useUrlState.ts`
-- [ ] Use react-router-dom's useSearchParams
-- [ ] Install react-router-dom if needed
-- [ ] Wrap App in BrowserRouter
-- [ ] Update `App.tsx` to use useUrlState instead of local state
-- [ ] Test: URL updates when tables added/removed
-- [ ] Test: Copy URL to new tab recreates state
+### Step 9: URL State Foundation (Simplified)
+- [x] Install react-router-dom
+- [x] Wrap App in BrowserRouter
+- [x] Refactor to use readable URL params (no encoding)
+- [x] Implement `tables` query param (comma-separated list)
+- [x] Create `frontend/src/hooks/useTableSelection.ts`
+- [x] Update `App.tsx` to sync visible tables with URL
+- [x] Auto-position widgets based on table order
+- [x] Test: URL shows `?tables=users,posts`
+- [x] Test: Copy URL to new tab recreates table selection
+- [x] Test: Refresh preserves visible tables
 
-### Step 10: Persist Grid Layout in URL
-- [ ] Update `App.tsx` to persist layout changes to URL state
-- [ ] Initialize widgets from URL state on mount
-- [ ] Merge auto-positioning with URL state logic
-- [ ] Update WidgetGrid to pass all layout properties
-- [ ] Install lodash.debounce and types
-- [ ] Debounce URL updates (500ms) during dragging
-- [ ] Test: Drag/resize updates URL after debounce
-- [ ] Test: Refresh preserves exact widget positions
-- [ ] Test: Shared URL recreates exact layout
+### Step 10: Prepare for Filter URL State (Phase 5)
+- [x] Design URL format for filters (readable)
+- [x] Plan filter serialization/deserialization
+- [ ] Update DashboardState type for filters
+- [ ] Document URL state format in README
 
 ---
 
 ## Phase 5: Basic Filtering
 
 ### Step 11: Backend Filter Building (Direct Filters)
-- [ ] Update `backend/app/models.py` with ColumnFilter model
-- [ ] Define filter operators (eq, ne, gt, lt, contains, etc.)
-- [ ] Update QueryRequest to include filters list
-- [ ] Create `build_where_clause()` in query_builder.py
-- [ ] Map operators to SQL expressions
-- [ ] Use parameterized queries for safety
-- [ ] Update `execute_table_query()` to handle filters
-- [ ] Apply filters to both data and count queries
-- [ ] Add test endpoint for filtering
-- [ ] Update README with filter examples
-- [ ] Test: Filter users by name, verify correct results
+- [x] Update `backend/app/models.py` with ColumnFilter model
+- [x] Define filter operators (eq, ne, gt, lt, contains, etc.)
+- [x] Update QueryRequest to include filters list
+- [x] Create `build_where_clause()` in query_builder.py
+- [x] Map operators to SQL expressions
+- [x] Use parameterized queries for safety
+- [x] Update `execute_table_query()` to handle filters
+- [x] Apply filters to both data and count queries
+- [x] Add test endpoint for filtering
+- [x] Update README with filter examples
+- [x] Test: Filter users by name, verify correct results
 
 ### Step 12: Frontend Filter Builder Panel
-- [ ] Update `frontend/src/types.ts` with ColumnFilter type
-- [ ] Add filters to DashboardState
-- [ ] Create `frontend/src/components/FilterBuilder.tsx`
-- [ ] Implement filter list display
-- [ ] Add "Add Filter" form (table, column, operator, value)
-- [ ] Create `frontend/src/components/FilterRow.tsx`
-- [ ] Implement filter removal
-- [ ] Position as fixed left panel (300px, collapsible)
-- [ ] Update useTableData to accept and pass filters
-- [ ] Update `App.tsx` to manage filters in URL state
-- [ ] Pass filters to all TableWidget components
-- [ ] Add CSS for filter panel
+- [x] Update `frontend/src/types.ts` with ColumnFilter type
+- [x] Add filters to URL state
+- [x] Create `frontend/src/components/FilterBuilder.tsx`
+- [x] Implement filter list display
+- [x] Add "Add Filter" form (table, column, operator, value)
+- [x] Implement filter removal
+- [x] Position as fixed left panel (320px)
+- [x] Update useTableData to accept and pass filters
+- [x] Create `frontend/src/hooks/useFilters.ts` for URL state
+- [x] Update `App.tsx` to manage filters in URL state
+- [x] Pass filters to all TableWidget components
 - [ ] Test: Add filter, see filtered data
 - [ ] Test: Filter persists in URL and on refresh
 

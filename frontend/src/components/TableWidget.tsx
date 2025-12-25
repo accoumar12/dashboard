@@ -4,17 +4,19 @@
 
 import { DataTable } from './DataTable';
 import { useTableData } from '../hooks/useTableData';
-import type { TableInfo } from '../types';
+import type { ColumnFilter, TableInfo } from '../types';
 
 interface TableWidgetProps {
   tableName: string;
   tableInfo: TableInfo;
+  filters: ColumnFilter[];
   onClose: () => void;
 }
 
-export function TableWidget({ tableName, tableInfo, onClose }: TableWidgetProps) {
+export function TableWidget({ tableName, tableInfo, filters, onClose }: TableWidgetProps) {
   const { data, isLoading, error } = useTableData({
     tableName,
+    filters,
     enabled: true,
   });
 

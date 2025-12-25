@@ -43,14 +43,15 @@ A minimal, web-based SQL dashboard application that allows users to upload Postg
 - **FR4.3**: Toggle sort direction on repeated clicks
 
 #### FR5: URL State Management
-- **FR5.1**: Encode all dashboard state in URL:
-  - Visible tables and their positions/sizes
-  - All active filters (table, column, operator, value)
-  - Sort configuration per table
-  - Pagination/scroll state per table
-- **FR5.2**: Support deep linking (URL fully reconstructs dashboard state)
-- **FR5.3**: Update URL in real-time as state changes
-- **FR5.4**: Parse URL on initial load to restore complete state
+- **FR5.1**: Store dashboard state in URL using readable query parameters:
+  - `tables`: Comma-separated list of visible table names
+  - `filters`: Filter configuration (table, column, operator, value)
+  - `sorts`: Sort configuration per table
+  - Grid layout positions auto-calculated from table order
+- **FR5.2**: Keep URLs human-readable (no base64 encoding)
+- **FR5.3**: Support deep linking (URL fully reconstructs dashboard state)
+- **FR5.4**: Update URL in real-time as state changes
+- **FR5.5**: Parse URL on initial load to restore complete state
 
 ### 2.2 Non-Functional Requirements
 
