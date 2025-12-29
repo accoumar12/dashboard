@@ -243,15 +243,19 @@ export function FilterBuilder({
               required
               value={selectedOperator}
               onChange={(e) => setSelectedOperator(e.target.value)}
+              disabled={!selectedColumn}
               style={{
                 width: '100%',
                 padding: '8px',
                 border: '1px solid #d1d5db',
                 borderRadius: '4px',
                 fontSize: '14px',
+                backgroundColor: !selectedColumn ? '#f3f4f6' : 'white',
               }}
             >
-              <option value="">Select operator...</option>
+              <option value="">
+                {selectedColumn ? 'Select operator...' : 'Select column first...'}
+              </option>
               {OPERATORS.map((op) => (
                 <option key={op.value} value={op.value}>
                   {op.label}
@@ -268,7 +272,9 @@ export function FilterBuilder({
               type="text"
               name="value"
               placeholder={
-                valueFieldDisabled
+                !selectedOperator
+                  ? 'Select operator first...'
+                  : valueFieldDisabled
                   ? ''
                   : loadingValues
                   ? 'Loading values...'
@@ -276,7 +282,7 @@ export function FilterBuilder({
                   ? 'Type to search or select...'
                   : 'Filter value'
               }
-              disabled={valueFieldDisabled || loadingValues}
+              disabled={!selectedOperator || valueFieldDisabled || loadingValues}
               list={showValueDropdown ? 'column-values-list' : undefined}
               autoComplete="off"
               style={{
@@ -285,7 +291,7 @@ export function FilterBuilder({
                 border: '1px solid #d1d5db',
                 borderRadius: '4px',
                 fontSize: '14px',
-                backgroundColor: valueFieldDisabled || loadingValues ? '#f3f4f6' : 'white',
+                backgroundColor: !selectedOperator || valueFieldDisabled || loadingValues ? '#f3f4f6' : 'white',
               }}
             />
             {showValueDropdown && (
