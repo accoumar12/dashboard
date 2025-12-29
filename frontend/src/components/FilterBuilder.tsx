@@ -2,7 +2,8 @@
  * FilterBuilder - Panel for creating and managing filters.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import type { ColumnFilter, TableInfo } from '../types';
 
 interface FilterBuilderProps {
@@ -33,6 +34,31 @@ export function FilterBuilder({
   onRemoveFilter,
 }: FilterBuilderProps) {
   const [selectedTable, setSelectedTable] = useState<string>('');
+  const [selectedColumn, setSelectedColumn] = useState<string>('');
+  const [selectedOperator, setSelectedOperator] = useState<string>('');
+  const [columnValues, setColumnValues] = useState<(string | number | boolean)[]>([]);
+  const [loadingValues, setLoadingValues] = useState(false);
+
+  // Fetch distinct values when column and operator are selected and operator is 'eq'
+  useEffect(() => {
+    if (selectedTable && selectedColumn && selectedOperator === 'eq') {
+      setLoadingValues(true);
+      axios
+        .get(`/api/column-values/${selectedTable}/${selectedColumn}`)
+        .then((response) => {
+          setColumnValues(response.data.values || []);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch column values:', error);
+          setColumnValues([]);
+        })
+        .finally(() => {
+          setLoadingValues(false);
+        });
+    } else {
+      setColumnValues([]);
+    }
+  }, [selectedTable, selectedColumn, selectedOperator]);
 
   const handleAddFilter = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,12 +85,19 @@ export function FilterBuilder({
 
     e.currentTarget.reset();
     setSelectedTable('');
+    setSelectedColumn('');
+    setSelectedOperator('');
+    setColumnValues([]);
   };
 
   // Get columns for the selected table
   const availableColumns = selectedTable
     ? tables.find((t) => t.name === selectedTable)?.columns || []
     : [];
+
+  // Determine if we should show value dropdown or input
+  const showValueDropdown = selectedOperator === 'eq' && columnValues.length > 0;
+  const valueFieldDisabled = selectedOperator === 'is_null' || selectedOperator === 'is_not_null';
 
   return (
     <div
@@ -145,11 +178,15 @@ export function FilterBuilder({
             <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px', color: '#374151' }}>
               Table
             </label>
-            <select
+            <input
+              type="text"
               name="table"
               required
               value={selectedTable}
               onChange={(e) => setSelectedTable(e.target.value)}
+              placeholder="Type to search tables..."
+              list="tables-list"
+              autoComplete="off"
               style={{
                 width: '100%',
                 padding: '8px',
@@ -157,24 +194,28 @@ export function FilterBuilder({
                 borderRadius: '4px',
                 fontSize: '14px',
               }}
-            >
-              <option value="">Select table...</option>
+            />
+            <datalist id="tables-list">
               {tables.map((table) => (
-                <option key={table.name} value={table.name}>
-                  {table.name}
-                </option>
+                <option key={table.name} value={table.name} />
               ))}
-            </select>
+            </datalist>
           </div>
 
           <div style={{ marginBottom: '12px' }}>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px', color: '#374151' }}>
               Column
             </label>
-            <select
+            <input
+              type="text"
               name="column"
               required
               disabled={!selectedTable}
+              value={selectedColumn}
+              onChange={(e) => setSelectedColumn(e.target.value)}
+              placeholder={selectedTable ? 'Type to search columns...' : 'Select table first...'}
+              list={selectedTable ? 'columns-list' : undefined}
+              autoComplete="off"
               style={{
                 width: '100%',
                 padding: '8px',
@@ -183,16 +224,14 @@ export function FilterBuilder({
                 fontSize: '14px',
                 backgroundColor: !selectedTable ? '#f3f4f6' : 'white',
               }}
-            >
-              <option value="">
-                {selectedTable ? 'Select column...' : 'Select table first...'}
-              </option>
-              {availableColumns.map((column) => (
-                <option key={column.name} value={column.name}>
-                  {column.name}
-                </option>
-              ))}
-            </select>
+            />
+            {selectedTable && (
+              <datalist id="columns-list">
+                {availableColumns.map((column) => (
+                  <option key={column.name} value={column.name} />
+                ))}
+              </datalist>
+            )}
           </div>
 
           <div style={{ marginBottom: '12px' }}>
@@ -202,6 +241,8 @@ export function FilterBuilder({
             <select
               name="operator"
               required
+              value={selectedOperator}
+              onChange={(e) => setSelectedOperator(e.target.value)}
               style={{
                 width: '100%',
                 padding: '8px',
@@ -226,15 +267,34 @@ export function FilterBuilder({
             <input
               type="text"
               name="value"
-              placeholder="Filter value"
+              placeholder={
+                valueFieldDisabled
+                  ? ''
+                  : loadingValues
+                  ? 'Loading values...'
+                  : showValueDropdown
+                  ? 'Type to search or select...'
+                  : 'Filter value'
+              }
+              disabled={valueFieldDisabled || loadingValues}
+              list={showValueDropdown ? 'column-values-list' : undefined}
+              autoComplete="off"
               style={{
                 width: '100%',
                 padding: '8px',
                 border: '1px solid #d1d5db',
                 borderRadius: '4px',
                 fontSize: '14px',
+                backgroundColor: valueFieldDisabled || loadingValues ? '#f3f4f6' : 'white',
               }}
             />
+            {showValueDropdown && (
+              <datalist id="column-values-list">
+                {columnValues.map((value, idx) => (
+                  <option key={idx} value={String(value)} />
+                ))}
+              </datalist>
+            )}
           </div>
 
           <button

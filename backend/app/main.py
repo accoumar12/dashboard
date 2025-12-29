@@ -1,6 +1,7 @@
 """FastAPI application entry point."""
 
 import logging
+from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -136,6 +137,71 @@ async def get_schema() -> DatabaseSchemaModel:
     except Exception as e:
         logger.error(f"Failed to analyze schema: {e}")
         raise HTTPException(status_code=500, detail="Failed to analyze database schema")
+
+
+@app.get("/api/column-values/{table}/{column}")
+async def get_column_values(table: str, column: str, limit: int = 100) -> dict[str, list[Any]]:
+    """Get distinct values for a column.
+
+    Args:
+        table: Table name.
+        column: Column name.
+        limit: Maximum number of distinct values to return.
+
+    Returns:
+        Dictionary with 'values' key containing list of distinct values.
+
+    Raises:
+        HTTPException: If query execution fails.
+    """
+    try:
+        from app import database
+        from sqlalchemy import MetaData, select, func
+
+        if database.engine is None:
+            raise HTTPException(
+                status_code=503, detail="Database not initialized"
+            )
+
+        # Load table metadata
+        metadata = MetaData()
+        async with database.engine.connect() as conn:
+            await conn.run_sync(
+                lambda sync_conn: metadata.reflect(
+                    sync_conn, only=[table], views=True
+                )
+            )
+
+        if table not in metadata.tables:
+            raise HTTPException(status_code=404, detail=f"Table '{table}' not found")
+
+        table_obj = metadata.tables[table]
+
+        if column not in table_obj.c:
+            raise HTTPException(
+                status_code=404, detail=f"Column '{column}' not found in table '{table}'"
+            )
+
+        # Query distinct values
+        query = (
+            select(table_obj.c[column])
+            .distinct()
+            .where(table_obj.c[column].isnot(None))
+            .limit(limit)
+        )
+
+        async with database.engine.connect() as conn:
+            result = await conn.execute(query)
+            rows = result.fetchall()
+            values = [row[0] for row in rows]
+
+        return {"values": values}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get column values: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to get column values")
 
 
 @app.post("/api/query", response_model=QueryResponse)
