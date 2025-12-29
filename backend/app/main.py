@@ -166,17 +166,19 @@ async def upload_database(request: Request, file: UploadFile = File(...)) -> Upl
         # Validate upload
         await validate_upload(file, settings.max_upload_size_mb)
 
-        # Generate session ID and file path
+        # Generate session ID
         session_id = str(uuid4())
-        file_path = settings.upload_dir / f"{session_id}.db"
 
-        # Save file
+        # Save file with session ID
         content = await file.read()
+        file_path = settings.upload_dir / f"{session_id}.db"
         file_path.write_bytes(content)
 
-        # Create session
-        await session_manager.create_session(
-            file_path, original_filename=file.filename or "unknown.db"
+        # Create session with the generated session_id
+        session_id = await session_manager.create_session(
+            file_path,
+            original_filename=file.filename or "unknown.db",
+            session_id=session_id,
         )
 
         # Build relationship graph for this session

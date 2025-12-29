@@ -97,13 +97,14 @@ class SessionManager:
         logger.info("Session manager initialized with playground database")
 
     async def create_session(
-        self, file_path: Path, original_filename: str
+        self, file_path: Path, original_filename: str, session_id: str | None = None
     ) -> str:
         """Create a new database session.
 
         Args:
             file_path: Path to the SQLite database file.
             original_filename: Original name of the uploaded file.
+            session_id: Optional session ID to use. If not provided, generates a new one.
 
         Returns:
             The session ID for the new session.
@@ -114,7 +115,10 @@ class SessionManager:
         if self._settings is None:
             raise RuntimeError("SessionManager not initialized")
 
-        session_id = str(uuid4())
+        if session_id is None:
+            session_id = str(uuid4())
+        else:
+            session_id = str(session_id)
 
         try:
             # Create engine for this session
