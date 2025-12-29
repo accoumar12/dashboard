@@ -4,7 +4,9 @@
   padding: 0;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   height: 100%;
 }
@@ -28,8 +30,10 @@ body {
 .app-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 24px 32px;
+  padding: 12px 32px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  height: 80px;
+  overflow: hidden;
 }
 
 .app-header h1 {

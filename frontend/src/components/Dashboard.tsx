@@ -3,8 +3,10 @@
  */
 
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Layout } from 'react-grid-layout/legacy';
 import { Zap, SlidersHorizontal } from 'lucide-react';
+import { AnimatedDogLogo } from './AnimatedDogLogo';
 import { FilterBuilder } from './FilterBuilder';
 import { Sidebar } from './Sidebar';
 import { TableWidget } from './TableWidget';
@@ -20,6 +22,7 @@ interface DashboardProps {
 }
 
 export function Dashboard({ sessionId }: DashboardProps) {
+  const navigate = useNavigate();
   const { data: schema, isLoading: schemaLoading, error: schemaError } = useSchema(sessionId);
   const { visibleTables, toggleTable } = useTableSelection();
   const { filters, addFilter, removeFilter } = useFilters();
@@ -97,15 +100,29 @@ export function Dashboard({ sessionId }: DashboardProps) {
     <div className="App">
       {/* Header with toggle buttons */}
       <header className="app-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', width: '100%', height: '100%' }}>
+          {/* Home button with dog logo */}
+          <div
+            onClick={() => navigate('/')}
+            style={{
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              flexShrink: 0,
+            }}
+            title="Go to home page"
+          >
+            <AnimatedDogLogo />
+          </div>
+
+          <div style={{ flex: 1 }}>
             <h1 style={{ margin: 0 }}>SQL Dashboard</h1>
             <p className="subtitle" style={{ margin: 0 }}>
               Interactive database visualization with draggable tables
               {sessionId !== 'playground' && ' • Session: ' + sessionId.substring(0, 8)}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
             <button
               onClick={() => setShowTables(!showTables)}
               style={{
