@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import type { Layout } from 'react-grid-layout/legacy';
+import { Zap, SlidersHorizontal } from 'lucide-react';
 import { FilterBuilder } from './components/FilterBuilder';
 import { Sidebar } from './components/Sidebar';
 import { TableWidget } from './components/TableWidget';
@@ -18,6 +19,8 @@ function Dashboard() {
   const { data: schema, isLoading: schemaLoading, error: schemaError } = useSchema();
   const { visibleTables, toggleTable } = useTableSelection();
   const { filters, addFilter, removeFilter } = useFilters();
+  const [showTables, setShowTables] = useState(true);
+  const [showFilters, setShowFilters] = useState(true);
 
   // Generate widgets from visible tables (auto-positioned)
   const widgets = useMemo<WidgetConfig[]>(() => {
@@ -92,21 +95,80 @@ function Dashboard() {
   }
 
   return (
-    <div className="dashboard">
-      <FilterBuilder
-        tables={schema.tables}
-        filters={filters}
-        onAddFilter={addFilter}
-        onRemoveFilter={removeFilter}
-      />
+    <div className="App">
+      {/* Header with toggle buttons */}
+      <header className="app-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div>
+            <h1 style={{ margin: 0 }}>SQL Dashboard</h1>
+            <p className="subtitle" style={{ margin: 0 }}>Interactive database visualization with draggable tables</p>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+            <button
+              onClick={() => setShowTables(!showTables)}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: showTables ? '#667eea' : '#fff',
+                color: showTables ? '#fff' : '#374151',
+                border: '1px solid #d1d5db',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+              title={showTables ? 'Hide tables panel' : 'Show tables panel'}
+            >
+              <Zap size={16} />
+              Tables
+            </button>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: showFilters ? '#667eea' : '#fff',
+                color: showFilters ? '#fff' : '#374151',
+                border: '1px solid #d1d5db',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+              title={showFilters ? 'Hide filters panel' : 'Show filters panel'}
+            >
+              <SlidersHorizontal size={16} />
+              Filters
+            </button>
+          </div>
+        </div>
+      </header>
 
-      <Sidebar
-        tables={schema.tables}
-        visibleTables={visibleTables}
-        onToggleTable={handleToggleTable}
-      />
+      <div className="dashboard">
+        {/* Tables panel (on the left) */}
+        {showTables && (
+          <Sidebar
+            tables={schema.tables}
+            visibleTables={visibleTables}
+            onToggleTable={handleToggleTable}
+          />
+        )}
 
-      <div className="grid-container">
+        {/* Filters panel (after tables) */}
+        {showFilters && (
+          <FilterBuilder
+            tables={schema.tables}
+            filters={filters}
+            onAddFilter={addFilter}
+            onRemoveFilter={removeFilter}
+          />
+        )}
+
+        <div className="grid-container">
         {widgets.length === 0 ? (
           <div className="empty-state">
             <h2>No tables selected</h2>
@@ -134,6 +196,7 @@ function Dashboard() {
             })}
           </WidgetGrid>
         )}
+        </div>
       </div>
     </div>
   );
@@ -142,13 +205,7 @@ function Dashboard() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="App">
-        <header className="app-header">
-          <h1>SQL Dashboard</h1>
-          <p className="subtitle">Interactive database visualization with draggable tables</p>
-        </header>
-        <Dashboard />
-      </div>
+      <Dashboard />
     </QueryClientProvider>
   );
 }
