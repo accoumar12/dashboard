@@ -2,6 +2,7 @@
  * FilterBuilder - Panel for creating and managing filters.
  */
 
+import { useState } from 'react';
 import type { ColumnFilter, TableInfo } from '../types';
 
 interface FilterBuilderProps {
@@ -31,6 +32,8 @@ export function FilterBuilder({
   onAddFilter,
   onRemoveFilter,
 }: FilterBuilderProps) {
+  const [selectedTable, setSelectedTable] = useState<string>('');
+
   const handleAddFilter = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -55,7 +58,13 @@ export function FilterBuilder({
     });
 
     e.currentTarget.reset();
+    setSelectedTable('');
   };
+
+  // Get columns for the selected table
+  const availableColumns = selectedTable
+    ? tables.find((t) => t.name === selectedTable)?.columns || []
+    : [];
 
   return (
     <div
@@ -139,6 +148,8 @@ export function FilterBuilder({
             <select
               name="table"
               required
+              value={selectedTable}
+              onChange={(e) => setSelectedTable(e.target.value)}
               style={{
                 width: '100%',
                 padding: '8px',
@@ -160,19 +171,28 @@ export function FilterBuilder({
             <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '4px', color: '#374151' }}>
               Column
             </label>
-            <input
-              type="text"
+            <select
               name="column"
               required
-              placeholder="Column name"
+              disabled={!selectedTable}
               style={{
                 width: '100%',
                 padding: '8px',
                 border: '1px solid #d1d5db',
                 borderRadius: '4px',
                 fontSize: '14px',
+                backgroundColor: !selectedTable ? '#f3f4f6' : 'white',
               }}
-            />
+            >
+              <option value="">
+                {selectedTable ? 'Select column...' : 'Select table first...'}
+              </option>
+              {availableColumns.map((column) => (
+                <option key={column.name} value={column.name}>
+                  {column.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div style={{ marginBottom: '12px' }}>

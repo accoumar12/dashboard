@@ -199,22 +199,6 @@ Track your progress building the SQL Dashboard application. Check off items as y
 - [ ] Test: Filter orders by products (cross-table)
 - [ ] Verify EXISTS subqueries are correct
 
-### Step 15: Frontend Cascading Filter Updates
-- [ ] Update useTableData to pass ALL filters to backend
-- [ ] Update FilterRow to show table name badge
-- [ ] Add visual indicator to TableWidget for cascaded filters
-- [ ] Create `frontend/src/lib/filterUtils.ts`
-- [ ] Implement `getFiltersForTable()` function
-- [ ] Implement `hasIndirectFilters()` function
-- [ ] Add loading spinners for filter changes
-- [ ] Add smooth transitions
-- [ ] Test: Two tables visible, filter one
-- [ ] Test: Verify other table updates correctly
-- [ ] Test: Multiple filters on different tables
-- [ ] Test: Remove filter, both tables show all data
-
----
-
 ## Phase 7: Advanced Features
 
 ### Step 16: Column Header Filter Popover
