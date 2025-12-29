@@ -23,7 +23,14 @@ class Settings(BaseSettings):
     use_playground_db: bool = True  # Use SQLite playground if PostgreSQL unavailable
     playground_db_path: str = str(Path(__file__).parent.parent / "playground.db")
     allowed_origins: list[str] = ["http://localhost:5173", "http://localhost:3000"]
-    max_upload_size_mb: int = 100
+
+    # Upload settings
+    upload_dir: Path = Path(__file__).parent.parent / "uploads"
+    max_upload_size_mb: int = 50
+    session_expiry_days: int = 7
+    cleanup_interval_hours: int = 6
+    query_timeout_seconds: int = 30
+
     debug: bool = False
 
 

@@ -1,5 +1,8 @@
 """Query builder for executing filtered and paginated table queries."""
 
+import asyncio
+
+from fastapi import HTTPException
 from sqlalchemy import MetaData, Table, and_, exists, func, or_, select, text
 from sqlalchemy.ext.asyncio import AsyncEngine
 
@@ -8,9 +11,43 @@ from app.relationship_graph import RelationshipGraph
 
 
 async def execute_table_query(
-    engine: AsyncEngine, request: QueryRequest, relationship_graph: RelationshipGraph | None = None
+    engine: AsyncEngine,
+    request: QueryRequest,
+    relationship_graph: RelationshipGraph | None = None,
+    timeout_seconds: int = 30,
 ) -> QueryResponse:
     """Execute a filtered and paginated query on a table.
+
+    Args:
+        engine: SQLAlchemy async engine.
+        request: Query request with table, filters, sort, and pagination.
+        relationship_graph: Optional relationship graph for cross-table filtering.
+        timeout_seconds: Maximum query execution time in seconds.
+
+    Returns:
+        QueryResponse with data, total count, offset, and limit.
+
+    Raises:
+        ValueError: If table doesn't exist or column is invalid.
+        HTTPException: If query exceeds timeout.
+    """
+    try:
+        return await asyncio.wait_for(
+            _execute_table_query_internal(engine, request, relationship_graph),
+            timeout=timeout_seconds,
+        )
+    except asyncio.TimeoutError:
+        raise HTTPException(
+            status_code=504, detail=f"Query timeout after {timeout_seconds} seconds"
+        )
+
+
+async def _execute_table_query_internal(
+    engine: AsyncEngine,
+    request: QueryRequest,
+    relationship_graph: RelationshipGraph | None = None,
+) -> QueryResponse:
+    """Internal query execution logic (without timeout wrapper).
 
     Args:
         engine: SQLAlchemy async engine.

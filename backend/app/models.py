@@ -123,3 +123,19 @@ class QueryResponse(BaseModel):
     total: int
     offset: int
     limit: int
+
+
+class UploadResponse(BaseModel):
+    """Upload response model.
+
+    Attributes:
+        session_id: Unique session ID for the uploaded database.
+        redirect_url: URL to redirect to the dashboard for this session.
+        file_size_mb: Size of the uploaded file in megabytes.
+        expires_at: ISO timestamp when the session expires.
+    """
+
+    session_id: str
+    redirect_url: str
+    file_size_mb: float
+    expires_at: str

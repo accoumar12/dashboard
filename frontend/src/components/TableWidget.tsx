@@ -7,14 +7,16 @@ import { useTableData } from '../hooks/useTableData';
 import type { ColumnFilter, TableInfo } from '../types';
 
 interface TableWidgetProps {
+  sessionId: string;
   tableName: string;
   tableInfo: TableInfo;
   filters: ColumnFilter[];
   onClose: () => void;
 }
 
-export function TableWidget({ tableName, tableInfo, filters, onClose }: TableWidgetProps) {
+export function TableWidget({ sessionId, tableName, tableInfo, filters, onClose }: TableWidgetProps) {
   const { data, isLoading, error } = useTableData({
+    sessionId,
     tableName,
     filters,
     enabled: true,

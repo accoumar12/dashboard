@@ -7,6 +7,7 @@ import { queryTable } from '../lib/api';
 import type { ColumnFilter, SortConfig } from '../types';
 
 interface UseTableDataOptions {
+  sessionId: string;
   tableName: string;
   filters?: ColumnFilter[];
   sort?: SortConfig;
@@ -16,6 +17,7 @@ interface UseTableDataOptions {
 }
 
 export function useTableData({
+  sessionId,
   tableName,
   filters = [],
   sort,
@@ -24,16 +26,16 @@ export function useTableData({
   enabled = true,
 }: UseTableDataOptions) {
   return useQuery({
-    queryKey: ['table', tableName, filters, sort, offset, limit],
+    queryKey: ['table', sessionId, tableName, filters, sort, offset, limit],
     queryFn: () =>
-      queryTable({
+      queryTable(sessionId, {
         table: tableName,
         filters,
         sort,
         offset,
         limit,
       }),
-    enabled: enabled && !!tableName,
+    enabled: enabled && !!tableName && !!sessionId,
     staleTime: 30 * 1000, // Data is somewhat fresh for 30 seconds
   });
 }
