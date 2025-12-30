@@ -2,6 +2,7 @@
  * TableWidget - A draggable/resizable widget that displays a single table.
  */
 
+import { useState, useEffect } from 'react';
 import { DataTable } from './DataTable';
 import { useTableData } from '../hooks/useTableData';
 import type { ColumnFilter, TableInfo } from '../types';
@@ -15,12 +16,35 @@ interface TableWidgetProps {
 }
 
 export function TableWidget({ sessionId, tableName, tableInfo, filters, onClose }: TableWidgetProps) {
+  const [limit, setLimit] = useState(50);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  // Reset limit when filters change
+  useEffect(() => {
+    setLimit(50);
+  }, [filters]);
+
   const { data, isLoading, error } = useTableData({
     sessionId,
     tableName,
     filters,
+    limit,
     enabled: true,
   });
+
+  // Reset loading flag when data arrives
+  useEffect(() => {
+    if (data && !isLoading) {
+      setIsLoadingMore(false);
+    }
+  }, [data, isLoading]);
+
+  const handleLoadMore = () => {
+    if (data && limit < data.total && !isLoadingMore) {
+      setIsLoadingMore(true);
+      setLimit((prev) => Math.min(prev + 50, data.total));
+    }
+  };
 
   return (
     <div
@@ -105,7 +129,12 @@ export function TableWidget({ sessionId, tableName, tableInfo, filters, onClose 
             </div>
           </div>
         ) : data && tableInfo ? (
-          <DataTable data={data} tableInfo={tableInfo} />
+          <DataTable
+            data={data}
+            tableInfo={tableInfo}
+            onLoadMore={handleLoadMore}
+            isLoadingMore={isLoadingMore}
+          />
         ) : null}
       </div>
     </div>

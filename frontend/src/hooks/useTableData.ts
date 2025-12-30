@@ -37,5 +37,6 @@ export function useTableData({
       }),
     enabled: enabled && !!tableName && !!sessionId,
     staleTime: 30 * 1000, // Data is somewhat fresh for 30 seconds
+    placeholderData: (previousData) => previousData, // Keep previous data while loading
   });
 }
