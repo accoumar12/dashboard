@@ -72,7 +72,7 @@ export function Sidebar({ tables, visibleTables, onToggleTable }: SidebarProps) 
                   height: '18px',
                   marginRight: '12px',
                   cursor: 'pointer',
-                  accentColor: '#667eea',
+                  accentColor: '#000000',
                 }}
               />
               <div style={{ flex: 1 }}>

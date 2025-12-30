@@ -308,7 +308,7 @@ export function FilterBuilder({
             style={{
               width: '100%',
               padding: '10px',
-              backgroundColor: '#667eea',
+              backgroundColor: '#000000',
               color: 'white',
               border: 'none',
               borderRadius: '6px',

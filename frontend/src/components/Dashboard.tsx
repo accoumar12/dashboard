@@ -120,7 +120,7 @@ export function Dashboard({ sessionId }: DashboardProps) {
               onClick={() => setShowTables(!showTables)}
               style={{
                 padding: '8px 16px',
-                backgroundColor: showTables ? '#667eea' : '#fff',
+                backgroundColor: showTables ? '#000000' : '#fff',
                 color: showTables ? '#fff' : '#374151',
                 border: '1px solid #d1d5db',
                 borderRadius: '6px',
@@ -140,7 +140,7 @@ export function Dashboard({ sessionId }: DashboardProps) {
               onClick={() => setShowFilters(!showFilters)}
               style={{
                 padding: '8px 16px',
-                backgroundColor: showFilters ? '#667eea' : '#fff',
+                backgroundColor: showFilters ? '#000000' : '#fff',
                 color: showFilters ? '#fff' : '#374151',
                 border: '1px solid #d1d5db',
                 borderRadius: '6px',

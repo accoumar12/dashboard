@@ -88,11 +88,11 @@ export function HomePage() {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
               style={{
-                border: `2px dashed ${isDragging ? '#667eea' : '#d1d5db'}`,
+                border: `2px dashed ${isDragging ? '#000000' : '#d1d5db'}`,
                 borderRadius: '8px',
                 padding: '40px 20px',
                 textAlign: 'center',
-                backgroundColor: isDragging ? '#eef2ff' : '#f9fafb',
+                backgroundColor: isDragging ? '#f3f4f6' : '#f9fafb',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
                 marginBottom: '20px',
@@ -126,7 +126,7 @@ export function HomePage() {
                 onClick={handleUpload}
                 style={{
                   width: '100%',
-                  backgroundColor: '#667eea',
+                  backgroundColor: '#000000',
                   color: 'white',
                   padding: '12px',
                   borderRadius: '6px',
@@ -136,8 +136,8 @@ export function HomePage() {
                   cursor: 'pointer',
                   transition: 'background-color 0.2s',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#5568d3')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#667eea')}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#333333')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#000000')}
               >
                 Upload Database
               </button>
@@ -149,7 +149,7 @@ export function HomePage() {
                   <div
                     style={{
                       width: `${progress}%`,
-                      backgroundColor: '#667eea',
+                      backgroundColor: '#000000',
                       height: '8px',
                       transition: 'width 0.3s',
                     }}
