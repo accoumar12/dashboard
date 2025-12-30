@@ -1,15 +1,15 @@
 # SQL Dashboard
 
-A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities.
+A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
 
 ## Introduction
 
 - ⚡ **Dynamic Data Exploration** - View multiple tables simultaneously with real-time filtering across related tables
 - 🔗 **URL State Management** - Your entire dashboard state (selected tables, filters) lives in the URL. Copy and paste to share results with colleagues instantly.
-- 🎨 **Intuitive Interface** - Clean, simple design that gets out of your way. No learning curve required.
+- 🎨 **Intuitive Interface** - Simple, clean design. Just upload your database file and start exploring - zero learning curve.
 - 🔄 **Cross-Table Filtering** - Apply filters that automatically work across table relationships
 
-## 🚀 Getting started
+## Getting started
 
 ### Backend
 

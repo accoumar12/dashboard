@@ -70,7 +70,18 @@ export function HomePage() {
   };
 
   const handlePlayground = () => {
-    navigate('/playground');
+    const tables = 'categories,customers,order_items,orders,products';
+    const filters = encodeURIComponent(
+      JSON.stringify([
+        {
+          table: 'products',
+          column: 'price',
+          operator: 'gt',
+          value: '60',
+        },
+      ])
+    );
+    navigate(`/playground?tables=${tables}&filters=${filters}`);
   };
 
   return (
