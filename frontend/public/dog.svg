@@ -1,0 +1,21 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- Head -->
+    <circle cx="100" cy="105" r="55" fill="#f2c48d" />
+
+    <!-- Ears -->
+    <ellipse cx="50" cy="95" rx="18" ry="32" fill="#d19a66" />
+    <ellipse cx="150" cy="95" rx="18" ry="32" fill="#d19a66" />
+
+    <!-- Eyes (cuter style) -->
+    <ellipse cx="88" cy="100" rx="3.5" ry="4.5" fill="#000" />
+    <ellipse cx="112" cy="100" rx="3.5" ry="4.5" fill="#000" />
+
+    <!-- Nose -->
+    <ellipse cx="100" cy="118" rx="8" ry="6" fill="#3b2f2f" />
+
+    <!-- Mouth -->
+    <path d="M92 130 Q100 136 108 130" stroke="#3b2f2f" stroke-width="2" fill="none" />
+
+    <!-- Tongue -->
+    <path d="M96 130 Q100 138 104 130 V135 Q100 140 96 135 Z" fill="#f48fb1" />
+</svg>
