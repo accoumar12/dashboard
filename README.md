@@ -1,6 +1,8 @@
 # SQL Dashboard
 
-A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
+A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities! 
+
+Try it live [here](https://dashboard.accoumar.fr/).
 
 ## Introduction
 
