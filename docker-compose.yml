@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: sql-dashboard-backend
     ports:
-      - "8000:8000"
+      - 8000
     environment:
       - APP_DEBUG=false
       - APP_MAX_DATABASES=100
@@ -32,7 +32,7 @@ services:
       dockerfile: Dockerfile
     container_name: sql-dashboard-frontend
     ports:
-      - "8080:80"
+      - 80
     depends_on:
       - backend
     restart: unless-stopped
