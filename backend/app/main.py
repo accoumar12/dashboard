@@ -3,7 +3,6 @@
 import logging
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
@@ -130,7 +129,9 @@ async def database_status() -> dict[str, bool]:
 
 
 @app.post("/api/upload", response_model=UploadResponse)
-async def upload_database(request: Request, file: UploadFile = File(...)) -> UploadResponse:
+async def upload_database(
+    request: Request, file: UploadFile = File(...)
+) -> UploadResponse:
     """Upload a SQLite database file.
 
     Creates a new session for the uploaded database and returns a session ID.
@@ -157,12 +158,18 @@ async def upload_database(request: Request, file: UploadFile = File(...)) -> Upl
     ]
 
     if len(_upload_tracker[client_ip]) >= _RATE_LIMIT_UPLOADS:
-        raise HTTPException(
-            status_code=429,
-            detail=f"Upload rate limit exceeded. Maximum {_RATE_LIMIT_UPLOADS} uploads per {_RATE_LIMIT_WINDOW_MINUTES} minutes.",
+        raise UploadValidationError(
+            f"Rate limit exceeded: Max {_RATE_LIMIT_UPLOADS} uploads per {_RATE_LIMIT_WINDOW_MINUTES} minutes."
         )
 
     try:
+        # Check database limit (count all uploaded database files)
+        uploaded_db_count = len(list(settings.upload_dir.glob("*.db")))
+        if uploaded_db_count >= settings.max_databases:
+            raise UploadValidationError(
+                f"Maximum number of databases reached ({settings.max_databases}). Please try again later.",
+            )
+
         # Validate upload
         await validate_upload(file, settings.max_upload_size_mb)
 
@@ -366,5 +373,7 @@ async def query_table(session_id: str, request: QueryRequest) -> QueryResponse:
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Query execution failed for session {session_id}: {e}", exc_info=True)
+        logger.error(
+            f"Query execution failed for session {session_id}: {e}", exc_info=True
+        )
         raise HTTPException(status_code=500, detail="Query execution failed")

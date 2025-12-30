@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     # Upload settings
     upload_dir: Path = Path(__file__).parent.parent / "uploads"
     max_upload_size_mb: int = 50
+    max_databases: int = 100
     session_expiry_days: int = 7
     cleanup_interval_hours: int = 6
     query_timeout_seconds: int = 30

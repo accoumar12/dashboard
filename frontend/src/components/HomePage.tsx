@@ -54,8 +54,11 @@ export function HomePage() {
       const response: UploadResponse = await uploadDatabase(file, (p) => setProgress(p));
       // Redirect to the dashboard for this session
       navigate(response.redirect_url);
-    } catch (err) {
-      if (err instanceof Error) {
+    } catch (err: any) {
+      // Extract error message from axios error response
+      if (err.response?.data?.detail) {
+        setError(err.response.data.detail);
+      } else if (err.message) {
         setError(err.message);
       } else {
         setError('Upload failed. Please try again.');
