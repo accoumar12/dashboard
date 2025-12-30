@@ -92,7 +92,7 @@ export function HomePage() {
           <h1 style={{ fontSize: '36px', fontWeight: 'bold', marginBottom: '12px', color: '#1f2937' }}>
             SQL Dashboard
           </h1>
-          <p style={{ fontSize: '16px', color: '#6b7280', maxWidth: '800px', margin: '0 auto' }}>
+          <p style={{ fontSize: '16px', color: '#6b7280', maxWidth: '1000px', margin: '0 auto' }}>
             A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
           </p>
         </div>
@@ -148,12 +148,6 @@ export function HomePage() {
         {/* Upload Section */}
         <div style={{ maxWidth: '550px', margin: '0 auto' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '30px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#1f2937' }}>
-              Get Started
-            </h2>
-            <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: '20px', fontSize: '14px' }}>
-              Upload your SQLite database or try our playground
-            </p>
 
           {/* Upload section */}
           <div style={{ marginBottom: '30px' }}>
@@ -186,7 +180,7 @@ export function HomePage() {
               ) : (
                 <>
                   <p style={{ color: '#374151', marginBottom: '5px' }}>
-                    <strong>Click to select</strong> or drag and drop
+                    <strong>Click to select your database file</strong> or drag and drop
                   </p>
                   <p style={{ color: '#9ca3af', fontSize: '14px' }}>
                     SQLite files only (.db, .sqlite, .sqlite3)
