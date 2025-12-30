@@ -85,75 +85,75 @@ export function HomePage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6', padding: '40px 20px' }}>
-      <div style={{ maxWidth: '1400px', width: '100%' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6', padding: '30px 20px' }}>
+      <div style={{ maxWidth: '1200px', width: '100%' }}>
         {/* Hero Section */}
-        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 'bold', marginBottom: '15px', color: '#1f2937' }}>
+        <div style={{ textAlign: 'center', marginBottom: '35px' }}>
+          <h1 style={{ fontSize: '36px', fontWeight: 'bold', marginBottom: '12px', color: '#1f2937' }}>
             SQL Dashboard
           </h1>
-          <p style={{ fontSize: '18px', color: '#6b7280', maxWidth: '900px', margin: '0 auto' }}>
+          <p style={{ fontSize: '16px', color: '#6b7280', maxWidth: '800px', margin: '0 auto' }}>
             A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
           </p>
         </div>
 
-        {/* Two Column Layout */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '40px', alignItems: 'start' }}>
-
-          {/* Left Column - Features */}
-          <div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-              <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '25px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                <div style={{ fontSize: '28px', marginBottom: '10px' }}>⚡</div>
-                <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '8px' }}>
-                  Dynamic Data Exploration
-                </h3>
-                <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
-                  View multiple tables with real-time filtering
-                </p>
-              </div>
-
-              <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '25px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                <div style={{ fontSize: '28px', marginBottom: '10px' }}>🔗</div>
-                <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '8px' }}>
-                  URL State Management
-                </h3>
-                <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
-                  Share results instantly by copying the URL
-                </p>
-              </div>
-
-              <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '25px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                <div style={{ fontSize: '28px', marginBottom: '10px' }}>🎨</div>
-                <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '8px' }}>
-                  Intuitive Interface
-                </h3>
-                <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
-                  Zero learning curve, start exploring immediately
-                </p>
-              </div>
-
-              <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '25px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                <div style={{ fontSize: '28px', marginBottom: '10px' }}>🔄</div>
-                <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '8px' }}>
-                  Cross-Table Filtering
-                </h3>
-                <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
-                  Filters work across table relationships
-                </p>
-              </div>
-            </div>
+        {/* Features Grid */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '16px',
+          marginBottom: '35px'
+        }}>
+          <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <div style={{ fontSize: '28px', marginBottom: '10px' }}>⚡</div>
+            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '6px' }}>
+              Dynamic Data Exploration
+            </h3>
+            <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
+              View multiple tables simultaneously with real-time filtering across related tables
+            </p>
           </div>
 
-          {/* Right Column - Upload Section */}
-          <div>
-            <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '35px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center', marginBottom: '10px', color: '#1f2937' }}>
-                Get Started
-              </h2>
-              <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: '25px', fontSize: '14px' }}>
-                Upload your SQLite database or try our playground
-              </p>
+          <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <div style={{ fontSize: '28px', marginBottom: '10px' }}>🔗</div>
+            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '6px' }}>
+              URL State Management
+            </h3>
+            <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
+              Your entire dashboard state lives in the URL. Copy and paste to share results instantly
+            </p>
+          </div>
+
+          <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <div style={{ fontSize: '28px', marginBottom: '10px' }}>🎨</div>
+            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '6px' }}>
+              Intuitive Interface
+            </h3>
+            <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
+              Simple, clean design. Just upload your database file and start exploring - zero learning curve
+            </p>
+          </div>
+
+          <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+            <div style={{ fontSize: '28px', marginBottom: '10px' }}>🔄</div>
+            <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#1f2937', marginBottom: '6px' }}>
+              Cross-Table Filtering
+            </h3>
+            <p style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
+              Apply filters that automatically work across table relationships
+            </p>
+          </div>
+        </div>
+
+        {/* Upload Section */}
+        <div style={{ maxWidth: '550px', margin: '0 auto' }}>
+          <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '30px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px', color: '#1f2937' }}>
+              Get Started
+            </h2>
+            <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: '20px', fontSize: '14px' }}>
+              Upload your SQLite database or try our playground
+            </p>
 
           {/* Upload section */}
           <div style={{ marginBottom: '30px' }}>
@@ -279,9 +279,7 @@ export function HomePage() {
           <p style={{ textAlign: 'center', color: '#9ca3af', fontSize: '12px', marginTop: '20px' }}>
             Max file size: 50MB • Sessions expire after 7 days
           </p>
-            </div>
           </div>
-
         </div>
       </div>
     </div>
