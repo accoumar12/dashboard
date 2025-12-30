@@ -5,7 +5,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: sql-dashboard-backend
     ports:
       - 8000
     environment:
@@ -30,7 +29,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: sql-dashboard-frontend
     ports:
       - 80
     depends_on:
