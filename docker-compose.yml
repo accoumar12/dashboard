@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sql-dashboard-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_DEBUG=false
+      - APP_MAX_DATABASES=100
+      - APP_MAX_UPLOAD_SIZE_MB=50
+      - APP_SESSION_EXPIRY_DAYS=7
+      - APP_CLEANUP_INTERVAL_HOURS=6
+      - APP_QUERY_TIMEOUT_SECONDS=30
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/playground.db:/app/playground.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sql-dashboard-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  uploads:
