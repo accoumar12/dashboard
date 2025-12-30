@@ -4,6 +4,10 @@ A lightweight, intuitive dashboard for exploring SQLite databases with dynamic f
 
 Try it live [here](https://dashboard.accoumar.fr/).
 
+
+https://github.com/user-attachments/assets/93505239-b7a0-41ac-8912-46c1a2db0020
+
+
 ## Introduction
 
 - ⚡ **Dynamic Data Exploration** - View multiple tables simultaneously with real-time filtering across related tables
