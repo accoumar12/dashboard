@@ -78,7 +78,7 @@ export function HomePage() {
             SQL Dashboard
           </h1>
           <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: '30px' }}>
-            Upload your SQLite database or try the playground
+            Nice and simple dynamic dashboard for your databases!
           </p>
 
           {/* Upload section */}

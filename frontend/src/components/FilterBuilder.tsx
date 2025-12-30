@@ -7,6 +7,7 @@ import axios from 'axios';
 import type { ColumnFilter, TableInfo } from '../types';
 
 interface FilterBuilderProps {
+  sessionId: string;
   tables: TableInfo[];
   filters: ColumnFilter[];
   onAddFilter: (filter: ColumnFilter) => void;
@@ -28,6 +29,7 @@ const OPERATORS = [
 ];
 
 export function FilterBuilder({
+  sessionId,
   tables,
   filters,
   onAddFilter,
@@ -35,30 +37,40 @@ export function FilterBuilder({
 }: FilterBuilderProps) {
   const [selectedTable, setSelectedTable] = useState<string>('');
   const [selectedColumn, setSelectedColumn] = useState<string>('');
-  const [selectedOperator, setSelectedOperator] = useState<string>('');
+  const [selectedOperator, setSelectedOperator] = useState<string>('eq');
   const [columnValues, setColumnValues] = useState<(string | number | boolean)[]>([]);
   const [loadingValues, setLoadingValues] = useState(false);
 
   // Fetch distinct values when column and operator are selected and operator is 'eq'
   useEffect(() => {
     if (selectedTable && selectedColumn && selectedOperator === 'eq') {
+      let cancelled = false;
       setLoadingValues(true);
+
       axios
-        .get(`/api/column-values/${selectedTable}/${selectedColumn}`)
+        .get(`/api/${sessionId}/column-values/${selectedTable}/${selectedColumn}`)
         .then((response) => {
-          setColumnValues(response.data.values || []);
+          if (!cancelled) {
+            setColumnValues(response.data.values || []);
+            setLoadingValues(false);
+          }
         })
         .catch((error) => {
-          console.error('Failed to fetch column values:', error);
-          setColumnValues([]);
-        })
-        .finally(() => {
-          setLoadingValues(false);
+          if (!cancelled) {
+            console.error('Failed to fetch column values:', error);
+            setColumnValues([]);
+            setLoadingValues(false);
+          }
         });
+
+      return () => {
+        cancelled = true;
+      };
     } else {
       setColumnValues([]);
+      setLoadingValues(false);
     }
-  }, [selectedTable, selectedColumn, selectedOperator]);
+  }, [sessionId, selectedTable, selectedColumn, selectedOperator]);
 
   const handleAddFilter = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +98,7 @@ export function FilterBuilder({
     e.currentTarget.reset();
     setSelectedTable('');
     setSelectedColumn('');
-    setSelectedOperator('');
+    setSelectedOperator('eq');
     setColumnValues([]);
   };
 
@@ -97,7 +109,10 @@ export function FilterBuilder({
 
   // Determine if we should show value dropdown or input
   const showValueDropdown = selectedOperator === 'eq' && columnValues.length > 0;
-  const valueFieldDisabled = selectedOperator === 'is_null' || selectedOperator === 'is_not_null';
+  const valueFieldDisabled =
+    !selectedColumn ||
+    selectedOperator === 'is_null' ||
+    selectedOperator === 'is_not_null';
 
   return (
     <div
@@ -272,9 +287,9 @@ export function FilterBuilder({
               type="text"
               name="value"
               placeholder={
-                !selectedOperator
-                  ? 'Select operator first...'
-                  : valueFieldDisabled
+                !selectedColumn
+                  ? 'Select column first...'
+                  : selectedOperator === 'is_null' || selectedOperator === 'is_not_null'
                   ? ''
                   : loadingValues
                   ? 'Loading values...'
@@ -282,7 +297,7 @@ export function FilterBuilder({
                   ? 'Type to search or select...'
                   : 'Filter value'
               }
-              disabled={!selectedOperator || valueFieldDisabled || loadingValues}
+              disabled={valueFieldDisabled || loadingValues}
               list={showValueDropdown ? 'column-values-list' : undefined}
               autoComplete="off"
               style={{
@@ -291,7 +306,7 @@ export function FilterBuilder({
                 border: '1px solid #d1d5db',
                 borderRadius: '4px',
                 fontSize: '14px',
-                backgroundColor: !selectedOperator || valueFieldDisabled || loadingValues ? '#f3f4f6' : 'white',
+                backgroundColor: valueFieldDisabled || loadingValues ? '#f3f4f6' : 'white',
               }}
             />
             {showValueDropdown && (

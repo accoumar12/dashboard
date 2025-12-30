@@ -4,7 +4,6 @@
 
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { Layout } from 'react-grid-layout/legacy';
 import { Zap, SlidersHorizontal } from 'lucide-react';
 import { AnimatedDogLogo } from './AnimatedDogLogo';
 import { FilterBuilder } from './FilterBuilder';
@@ -56,7 +55,7 @@ export function Dashboard({ sessionId }: DashboardProps) {
     toggleTable(tableName);
   };
 
-  const handleLayoutChange = (_layout: Layout) => {
+  const handleLayoutChange = () => {
     // Layout changes are not persisted to URL
     // Widgets are auto-positioned based on visible tables
   };
@@ -120,8 +119,8 @@ export function Dashboard({ sessionId }: DashboardProps) {
               onClick={() => setShowTables(!showTables)}
               style={{
                 padding: '8px 16px',
-                backgroundColor: showTables ? '#000000' : '#fff',
-                color: showTables ? '#fff' : '#374151',
+                backgroundColor: showTables ? '#fff' : '#000000',
+                color: showTables ? '#374151' : '#fff',
                 border: '1px solid #d1d5db',
                 borderRadius: '6px',
                 cursor: 'pointer',
@@ -134,14 +133,14 @@ export function Dashboard({ sessionId }: DashboardProps) {
               title={showTables ? 'Hide tables panel' : 'Show tables panel'}
             >
               <Zap size={16} />
-              Tables
+              {showTables ? 'Hide Tables' : 'Show Tables'}
             </button>
             <button
               onClick={() => setShowFilters(!showFilters)}
               style={{
                 padding: '8px 16px',
-                backgroundColor: showFilters ? '#000000' : '#fff',
-                color: showFilters ? '#fff' : '#374151',
+                backgroundColor: showFilters ? '#fff' : '#000000',
+                color: showFilters ? '#374151' : '#fff',
                 border: '1px solid #d1d5db',
                 borderRadius: '6px',
                 cursor: 'pointer',
@@ -154,7 +153,7 @@ export function Dashboard({ sessionId }: DashboardProps) {
               title={showFilters ? 'Hide filters panel' : 'Show filters panel'}
             >
               <SlidersHorizontal size={16} />
-              Filters
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
             </button>
           </div>
 
@@ -208,6 +207,7 @@ export function Dashboard({ sessionId }: DashboardProps) {
         {/* Filters panel (after tables) */}
         {showFilters && (
           <FilterBuilder
+            sessionId={sessionId}
             tables={schema.tables}
             filters={filters}
             onAddFilter={addFilter}
