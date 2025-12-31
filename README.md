@@ -7,6 +7,7 @@ Try it live [here](https://dashboard.accoumar.fr/).
 
 https://github.com/user-attachments/assets/93505239-b7a0-41ac-8912-46c1a2db0020
 
+P.S. Heavily helped by AI. Tbh Claude code is amazing when guided well!
 
 ## Introduction
 
