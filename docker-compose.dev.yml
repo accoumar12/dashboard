@@ -1,0 +1,36 @@
+services:
+  backend:
+    restart: "no"
+    ports:
+      - "8000:8000"
+    networks:
+      - default
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend
+          target: /app
+          ignore:
+            - __pycache__/
+            - "*.pyc"
+            - uploads/
+            - playground.db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    restart: "no"
+    ports:
+      - "3000:80"
+    networks:
+      - default
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/src
+          target: /app/src
+
+networks:
+  dokploy-network:
+    external: false
