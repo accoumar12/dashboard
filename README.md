@@ -1,11 +1,10 @@
 # SQL Dashboard
 
-A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities! 
+A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
 
 Try it live [here](https://dashboard.accoumar.fr/).
 
-
-https://github.com/user-attachments/assets/93505239-b7a0-41ac-8912-46c1a2db0020
+<https://github.com/user-attachments/assets/93505239-b7a0-41ac-8912-46c1a2db0020>
 
 P.S. Heavily helped by AI. Tbh Claude code is amazing when guided well!
 
@@ -16,22 +15,10 @@ P.S. Heavily helped by AI. Tbh Claude code is amazing when guided well!
 - 🎨 **Intuitive Interface** - Simple, clean design. Just upload your database file and start exploring - zero learning curve.
 - 🔄 **Cross-Table Filtering** - Apply filters that automatically work across table relationships
 
-## Getting started
+## Development
 
-### Backend
+See [development docs](./development.md).
 
-```bash
-cd backend
-uv sync
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+## Deployment
 
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Visit `http://localhost:5173` to start exploring your databases! 🎉
+We use [dokploy](https://github.com/Dokploy/dokploy) for deployment, via [this docker compose file](./docker-compose.yml).
