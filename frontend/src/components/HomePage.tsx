@@ -2,10 +2,11 @@
  * Home page component for database upload or playground access.
  */
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { uploadDatabase } from '../lib/api';
 import type { UploadResponse } from '../lib/api';
+import { ActivityIcon, type ActivityIconHandle } from './ActivityIcon';
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export function HomePage() {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const activityIconRef = useRef<ActivityIconHandle>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -85,7 +87,7 @@ export function HomePage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6', padding: '30px 20px' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6', padding: '30px 20px', position: 'relative' }}>
       <div style={{ maxWidth: '1200px', width: '100%' }}>
         {/* Hero Section */}
         <div style={{ textAlign: 'center', marginBottom: '35px' }}>
@@ -276,6 +278,36 @@ export function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Uptime Monitor Link */}
+      <a
+        href="https://uptime-monitor.accoumar.fr/endpoints/personal_sql-dashboard"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          color: '#6b7280',
+          textDecoration: 'none',
+          fontSize: '14px',
+          transition: 'color 0.2s',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = '#000000';
+          activityIconRef.current?.startAnimation();
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = '#6b7280';
+          activityIconRef.current?.stopAnimation();
+        }}
+      >
+        <ActivityIcon ref={activityIconRef} size={20} />
+        <span>Uptime monitor</span>
+      </a>
     </div>
   );
 }
