@@ -10,7 +10,7 @@ interface DataTableProps {
   tableInfo: TableInfo;
   onLoadMore?: () => void;
   isLoadingMore?: boolean;
-  onCellClick?: (columnName: string, value: any) => void;
+  onCellClick?: (columnName: string, value: string | number | boolean | null) => void;
 }
 
 export function DataTable({ data, tableInfo, onLoadMore, isLoadingMore, onCellClick }: DataTableProps) {

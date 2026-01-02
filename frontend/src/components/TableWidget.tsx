@@ -13,7 +13,7 @@ interface TableWidgetProps {
   tableInfo: TableInfo;
   filters: ColumnFilter[];
   onClose: () => void;
-  onCellClick?: (tableName: string, columnName: string, value: any) => void;
+  onCellClick?: (tableName: string, columnName: string, value: string | number | boolean | null) => void;
 }
 
 export function TableWidget({ sessionId, tableName, tableInfo, filters, onClose, onCellClick }: TableWidgetProps) {

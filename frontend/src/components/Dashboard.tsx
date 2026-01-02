@@ -4,13 +4,14 @@
 
 import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Zap, SlidersHorizontal, HelpCircle } from 'lucide-react';
+import { Zap, SlidersHorizontal } from 'lucide-react';
 import { AnimatedDogLogo } from './AnimatedDogLogo';
 import { FilterBuilder } from './FilterBuilder';
 import { Sidebar } from './Sidebar';
 import { TableWidget } from './TableWidget';
 import { WidgetGrid } from './WidgetGrid';
 import { ShortcutsModal } from './ShortcutsModal';
+import { CircleHelpIcon } from './CircleHelpIcon';
 import type { WidgetConfig } from './WidgetGrid';
 import { useFilters } from '../hooks/useFilters';
 import { useSchema } from '../hooks/useSchema';
@@ -98,7 +99,7 @@ export function Dashboard({ sessionId }: DashboardProps) {
     toggleTable(tableName);
   };
 
-  const handleCellClick = (tableName: string, columnName: string, value: any) => {
+  const handleCellClick = (tableName: string, columnName: string, value: string | number | boolean | null) => {
     // Don't add filter for NULL values
     if (value === null) {
       return;
@@ -307,8 +308,8 @@ export function Dashboard({ sessionId }: DashboardProps) {
           position: 'fixed',
           bottom: '20px',
           right: '20px',
-          width: '48px',
-          height: '48px',
+          width: '40px',
+          height: '40px',
           borderRadius: '50%',
           backgroundColor: '#000000',
           color: '#ffffff',
@@ -331,7 +332,7 @@ export function Dashboard({ sessionId }: DashboardProps) {
           e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
         }}
       >
-        <HelpCircle size={24} />
+        <CircleHelpIcon size={32} />
       </button>
 
       {/* Shortcuts modal */}
