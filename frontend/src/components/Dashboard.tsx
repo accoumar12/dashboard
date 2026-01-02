@@ -2,7 +2,7 @@
  * Main dashboard component for displaying database tables and filters.
  */
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Zap, SlidersHorizontal } from 'lucide-react';
 import { AnimatedDogLogo } from './AnimatedDogLogo';
@@ -10,6 +10,8 @@ import { FilterBuilder } from './FilterBuilder';
 import { Sidebar } from './Sidebar';
 import { TableWidget } from './TableWidget';
 import { WidgetGrid } from './WidgetGrid';
+import { ShortcutsModal } from './ShortcutsModal';
+import { CircleHelpIcon } from './CircleHelpIcon';
 import type { WidgetConfig } from './WidgetGrid';
 import { useFilters } from '../hooks/useFilters';
 import { useSchema } from '../hooks/useSchema';
@@ -27,6 +29,39 @@ export function Dashboard({ sessionId }: DashboardProps) {
   const { filters, addFilter, removeFilter } = useFilters();
   const [showTables, setShowTables] = useState(true);
   const [showFilters, setShowFilters] = useState(true);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+
+  // Keyboard shortcut listener for "?"
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // Check if "?" is pressed (Shift + / on most keyboards)
+      if (e.key === '?' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        // Don't trigger if user is typing in an input
+        const target = e.target as HTMLElement;
+        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+          return;
+        }
+        e.preventDefault();
+        setShowShortcuts((prev) => !prev);
+      }
+      // Also listen for Escape to close modal
+      if (e.key === 'Escape' && showShortcuts) {
+        setShowShortcuts(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [showShortcuts]);
+
+  // Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   // Generate widgets from visible tables (auto-positioned)
   const widgets = useMemo<WidgetConfig[]>(() => {
@@ -62,6 +97,24 @@ export function Dashboard({ sessionId }: DashboardProps) {
 
   const handleCloseWidget = (tableName: string) => {
     toggleTable(tableName);
+  };
+
+  const handleCellClick = (tableName: string, columnName: string, value: string | number | boolean | null) => {
+    // Don't add filter for NULL values
+    if (value === null) {
+      return;
+    }
+
+    // Add equals filter
+    addFilter({
+      table: tableName,
+      column: columnName,
+      operator: 'eq',
+      value: String(value),
+    });
+
+    // Show toast notification
+    setToast(`Filter added: ${tableName}.${columnName} = ${value}`);
   };
 
   if (schemaLoading) {
@@ -238,6 +291,7 @@ export function Dashboard({ sessionId }: DashboardProps) {
                       tableInfo={tableInfo}
                       filters={filters}
                       onClose={() => handleCloseWidget(widget.i)}
+                      onCellClick={handleCellClick}
                     />
                   </div>
                 );
@@ -246,6 +300,65 @@ export function Dashboard({ sessionId }: DashboardProps) {
           )}
         </div>
       </div>
+
+      {/* Shortcuts button - bottom right */}
+      <button
+        onClick={() => setShowShortcuts(true)}
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          width: '40px',
+          height: '40px',
+          borderRadius: '50%',
+          backgroundColor: '#000000',
+          color: '#ffffff',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          transition: 'all 0.2s',
+          zIndex: 100,
+        }}
+        title="Keyboard shortcuts (?)"
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.15)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+        }}
+      >
+        <CircleHelpIcon size={32} />
+      </button>
+
+      {/* Shortcuts modal */}
+      <ShortcutsModal isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
+
+      {/* Toast notification */}
+      {toast && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '80px',
+            right: '20px',
+            backgroundColor: '#1f2937',
+            color: '#ffffff',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            fontSize: '14px',
+            zIndex: 999,
+            maxWidth: '400px',
+            animation: 'slideIn 0.2s ease-out',
+          }}
+        >
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
