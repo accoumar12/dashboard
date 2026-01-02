@@ -13,9 +13,10 @@ interface TableWidgetProps {
   tableInfo: TableInfo;
   filters: ColumnFilter[];
   onClose: () => void;
+  onCellClick?: (tableName: string, columnName: string, value: any) => void;
 }
 
-export function TableWidget({ sessionId, tableName, tableInfo, filters, onClose }: TableWidgetProps) {
+export function TableWidget({ sessionId, tableName, tableInfo, filters, onClose, onCellClick }: TableWidgetProps) {
   const [limit, setLimit] = useState(50);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -134,6 +135,7 @@ export function TableWidget({ sessionId, tableName, tableInfo, filters, onClose 
             tableInfo={tableInfo}
             onLoadMore={handleLoadMore}
             isLoadingMore={isLoadingMore}
+            onCellClick={onCellClick ? (columnName, value) => onCellClick(tableName, columnName, value) : undefined}
           />
         ) : null}
       </div>

@@ -10,9 +10,10 @@ interface DataTableProps {
   tableInfo: TableInfo;
   onLoadMore?: () => void;
   isLoadingMore?: boolean;
+  onCellClick?: (columnName: string, value: any) => void;
 }
 
-export function DataTable({ data, tableInfo, onLoadMore, isLoadingMore }: DataTableProps) {
+export function DataTable({ data, tableInfo, onLoadMore, isLoadingMore, onCellClick }: DataTableProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const previousDataLengthRef = useRef(data.data.length);
   const scrollPositionRef = useRef(0);
@@ -109,11 +110,23 @@ export function DataTable({ data, tableInfo, onLoadMore, isLoadingMore }: DataTa
               {tableInfo.columns.map((col) => (
                 <td
                   key={col.name}
+                  onClick={() => onCellClick?.(col.name, row[col.name])}
                   style={{
                     padding: '10px 8px',
                     borderBottom: '1px solid #eee',
-                    color: '#1f2937'
+                    color: '#1f2937',
+                    cursor: onCellClick ? 'pointer' : 'default',
+                    transition: 'background-color 0.15s',
                   }}
+                  onMouseEnter={(e) => {
+                    if (onCellClick) {
+                      e.currentTarget.style.backgroundColor = '#f3f4f6';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = idx % 2 === 0 ? '#fff' : '#f9f9f9';
+                  }}
+                  title={onCellClick ? 'Click to filter by this value' : undefined}
                 >
                   {row[col.name] === null ? (
                     <span style={{ color: '#999', fontStyle: 'italic' }}>NULL</span>
