@@ -1,6 +1,6 @@
-# SQL Dashboard Frontend
+# CrossFilterUI Frontend
 
-Frontend application for the SQL Dashboard, built with React, TypeScript, and Vite.
+Frontend application for the CrossFilterUI app, built with React, TypeScript, and Vite.
 
 ## Features
 
@@ -75,6 +75,7 @@ The frontend communicates with the backend API through the axios client configur
 All API requests are automatically proxied to the backend server.
 
 Example:
+
 ```typescript
 import { checkHealth } from './lib/api';
 
@@ -89,6 +90,7 @@ const health = await checkHealth();
 3. Use React Query hooks to call the API
 
 Example:
+
 ```typescript
 // In api.ts
 export const getSchema = async () => {
@@ -127,6 +129,7 @@ for better organization as the project grows.
 ## Testing
 
 Testing infrastructure will be added in later phases using:
+
 - Vitest for unit tests
 - React Testing Library for component tests
 - Playwright/Cypress for E2E tests

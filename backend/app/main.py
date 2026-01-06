@@ -34,8 +34,8 @@ _RATE_LIMIT_WINDOW_MINUTES = 60
 _cleanup_service: CleanupService | None = None
 
 app = FastAPI(
-    title="SQL Dashboard API",
-    description="Backend API for the SQL Dashboard application",
+    title="CrossFilterUI Backend",
+    description="Backend API for the CrossFilterUI application",
     version="0.1.0",
     debug=settings.debug,
 )
@@ -58,7 +58,7 @@ async def startup_event() -> None:
     """
     global _cleanup_service
 
-    logger.info("Starting SQL Dashboard API...")
+    logger.info("Starting API...")
     try:
         # Initialize session manager with playground
         await session_manager.initialize(settings)
@@ -93,7 +93,7 @@ async def shutdown_event() -> None:
 
     Cleans up all database sessions and stops cleanup service.
     """
-    logger.info("Shutting down SQL Dashboard API...")
+    logger.info("Shutting the API...")
     try:
         # Stop cleanup service
         if _cleanup_service:

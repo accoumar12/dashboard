@@ -1,3 +1,3 @@
-"""SQL Dashboard Backend Application."""
+"""CrossFilterUI Backend Application."""
 
 __version__ = "0.1.0"

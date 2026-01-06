@@ -8,7 +8,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Application settings.
 
-    Configuration for the SQL Dashboard backend application.
     Settings are loaded from environment variables with the APP_ prefix.
     """
 

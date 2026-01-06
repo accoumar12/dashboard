@@ -1,5 +1,5 @@
 {
-  "name": "Dashboard Dev Container",
+  "name": "CrossFilterUI Dev Container",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
   "customizations": {
     "vscode": {

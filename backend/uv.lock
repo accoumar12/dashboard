@@ -121,7 +121,7 @@ wheels = [
 ]
 
 [[package]]
-name = "dashboard-backend"
+name = "cross-filter-ui-backend"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

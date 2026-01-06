@@ -1,7 +1,7 @@
 [project]
-name = "dashboard-backend"
+name = "cross-filter-ui-backend"
 version = "0.1.0"
-description = "SQL Dashboard Backend - FastAPI application for interactive database visualization"
+description = "CrossFilterUI- FastAPI application for interactive database visualization"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.100.0",

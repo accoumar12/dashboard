@@ -1,6 +1,3 @@
-"""Custom exceptions for the SQL Dashboard application."""
-
-
 class SessionNotFoundError(Exception):
     """Raised when a requested session ID is not found."""
 
