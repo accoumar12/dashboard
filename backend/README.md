@@ -1,6 +1,6 @@
-# SQL Dashboard Backend
+# CrossFilterUI Backend
 
-Backend API for the SQL Dashboard application, built with FastAPI and SQLAlchemy.
+Backend API for the CrossFilterUI application, built with FastAPI and SQLAlchemy.
 
 ## Features
 
@@ -69,8 +69,8 @@ The API will be available at `http://localhost:8000`.
 
 Once the server is running, visit:
 
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+- Swagger UI: <http://localhost:8000/docs>
+- ReDoc: <http://localhost:8000/redoc>
 
 ## Available Endpoints
 
@@ -81,6 +81,7 @@ curl http://localhost:8000/api/health
 ```
 
 Response:
+
 ```json
 {
   "status": "ok"

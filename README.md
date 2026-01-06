@@ -1,8 +1,8 @@
-# SQL Dashboard
+# CrossFilterUI
 
-A lightweight, intuitive dashboard for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
+A lightweight, intuitive ui for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
 
-Try it live [here](https://dashboard.accoumar.fr/).
+Try it live [here](https://crossfilterui.accoumar.fr/).
 
 <https://github.com/user-attachments/assets/93505239-b7a0-41ac-8912-46c1a2db0020>
 
