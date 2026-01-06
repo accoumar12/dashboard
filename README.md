@@ -1,6 +1,6 @@
 # CrossFilterUI
 
-A lightweight, intuitive ui for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
+A lightweight, intuitive UI for exploring SQLite databases with dynamic filtering and instant sharing capabilities!
 
 Try it live [here](https://crossfilterui.accoumar.fr/).
 
